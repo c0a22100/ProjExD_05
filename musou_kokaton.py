@@ -5,10 +5,35 @@ import time
 
 import pygame as pg
 
-
 WIDTH = 1600  # ゲームウィンドウの幅
-HEIGHT = 900  # ゲームウィンドウの高さ
+HEIGHT = 900  # ゲームウィンドウの高68
+def start_screen(screen):
+    """
+    スタート画面を表示する
+    引数1 screen: 画面Surface
+    """
+    bg_img = pg.image.load("ex05/fig/pg_bg.jpg")
+    font_title = pg.font.Font(None, 150)
+    text_title = font_title.render("SHOOTING GAME", True, (0, 0, 0))
+    text_title_rect = text_title.get_rect(center=(WIDTH // 2, HEIGHT // 2 - 40))
 
+
+    font = pg.font.Font(None, 80)
+    text = font.render("Press SPACE BAR to start.", True, (0, 0, 0))
+    text_rect = text.get_rect(center=(WIDTH // 2, HEIGHT // 2 + 90))
+
+    screen.blit(bg_img, (0, 0))
+    screen.blit(text_title, text_title_rect)
+    screen.blit(text, text_rect)
+    pg.display.flip()
+
+    while True:
+        for event in pg.event.get():
+            if event.type == pg.QUIT:
+                pg.quit()
+                sys.exit()
+            elif event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
+                return
 
 def check_bound(obj: pg.Rect) -> tuple[bool, bool]:
     """
@@ -80,7 +105,7 @@ class Bird(pg.sprite.Sprite):
         引数1 num：こうかとん画像ファイル名の番号
         引数2 screen：画面Surface
         """
-        self.image = pg.transform.rotozoom(pg.image.load(f"fig/{num}.png"), 0, 2.0)
+        self.image = pg.transform.rotozoom(pg.image.load(f"ex05/fig/{num}.png"), 0, 2.0)
         screen.blit(self.image, self.rect)
 
     def update(self, key_lst: list[bool], screen: pg.Surface):
@@ -173,7 +198,7 @@ class Beam(pg.sprite.Sprite):
         super().__init__()
         self.vx, self.vy = bird.get_direction()
         angle = math.degrees(math.atan2(-self.vy, self.vx))
-        self.image = pg.transform.rotozoom(pg.image.load(f"fig/beam.png"), angle, 2.0)
+        self.image = pg.transform.rotozoom(pg.image.load(f"ex05/fig/beam.png"), angle, 2.0)
         self.vx = math.cos(math.radians(angle))
         self.vy = -math.sin(math.radians(angle))
         self.rect = self.image.get_rect()
@@ -202,7 +227,7 @@ class Explosion(pg.sprite.Sprite):
         引数2 life：爆発時間
         """
         super().__init__()
-        img = pg.image.load("fig/explosion.gif")
+        img = pg.image.load("ex05/fig/explosion.gif")
         self.imgs = [img, pg.transform.flip(img, 1, 1)]
         self.image = self.imgs[0]
         self.rect = self.image.get_rect(center=obj.rect.center)
@@ -223,7 +248,7 @@ class Enemy(pg.sprite.Sprite):
     """
     敵機に関するクラス
     """
-    imgs = [pg.image.load(f"ex05/fig/alien{i}.png") for i in range(1, 4)]
+    imgs = [pg.image.load(f"ex04/fig/alien{i}.png") for i in range(1, 4)]
     
     def __init__(self):
         super().__init__()
@@ -340,6 +365,8 @@ def main():
     screen = pg.display.set_mode((WIDTH, HEIGHT))
     bg_img = pg.image.load("ex05/fig/pg_bg.jpg")
     score = Score()
+
+    start_screen(screen)
 
     bird = Bird(3, (900, 400))
     bombs = pg.sprite.Group()
@@ -479,4 +506,3 @@ if __name__ == "__main__":
     pg.quit()
     sys.exit
     sys.exit()
-
