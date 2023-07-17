@@ -10,7 +10,7 @@ HEIGHT = 900  # ゲームウィンドウの高68
 def start_screen(screen):
     """
     スタート画面を表示する
-    引数1 screen: 画面Surface
+    引数1 screen: 画面 Surface
     """
     bg_img = pg.image.load("ex05/fig/pg_bg.jpg")
     font_title = pg.font.Font(None, 150)
